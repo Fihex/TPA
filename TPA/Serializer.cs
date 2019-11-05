@@ -34,9 +34,23 @@ namespace TPA
                     LProducts.Add(new Product { Id = info.Id, Category = info.Category, Title = info.Title, price = new Price { Value = info.Price, Unit = "RUB" }, description = new Description { Weight = info.Weight } });
 
                 XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
-                StreamWriter writer = new StreamWriter("products.xml");
-                xmlSerializer.Serialize(writer, LProducts);
-                writer.Close();
+                string curFile = @"products.xml";
+                if (!File.Exists(curFile))
+                {
+                    StreamWriter writer = new StreamWriter("products.xml");
+                    xmlSerializer.Serialize(writer, LProducts);
+                    writer.Close();
+                    Console.WriteLine("Файл не существует: поэтому был создан файл!");
+                }
+                else if(File.Exists(curFile))
+                {
+                    Add();
+                    Console.WriteLine("Файл существует!");
+                }
+                else
+                {
+                    Console.WriteLine("ERROR");
+                }
 
                 Console.WriteLine("Сериализация завершена!");
 

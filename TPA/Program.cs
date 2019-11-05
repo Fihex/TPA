@@ -20,7 +20,12 @@ namespace TPA
                 "Главное меню",
                 new[]
                 {
-                    new Menu.Item("Продукты", new[]
+                    new Menu.Item("Покупатель", new[]
+                    {
+                        new Menu.Item("Список продуктов", Desert),
+                        new Menu.Item("Купить продукт", Exit),
+                    }),
+                    new Menu.Item("Продавец", new[]
                     {
                         new Menu.Item("Список продуктов", Desert),
                         new Menu.Item("Добавить продукты с удаление файла", Sert),
