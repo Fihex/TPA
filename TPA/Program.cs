@@ -15,6 +15,7 @@ namespace TPA
         {
 
             Console.OutputEncoding = Encoding.Default;
+
             Menu = new Menu
             (
                 "Главное меню",
@@ -22,15 +23,14 @@ namespace TPA
                 {
                     new Menu.Item("Покупатель", new[]
                     {
-                        new Menu.Item("Список продуктов", Desert),
+                        new Menu.Item("Список продуктов", DeserializerUser),
                         new Menu.Item("Купить продукт", Exit),
                     }),
                     new Menu.Item("Продавец", new[]
                     {
-                        new Menu.Item("Список продуктов", Desert),
-                        new Menu.Item("Добавить продукты с удаление файла", Sert),
-                        new Menu.Item("Добавить продукты", ISert),
-                        new Menu.Item("Удалить продукт", DSert),
+                        new Menu.Item("Список продуктов", DeserializerTrader),
+                        new Menu.Item("Добавить продукты", AddProducts),
+                        new Menu.Item("Удалить продукты", DellProducts),
                         new Menu.Item("Удалить файл", DeleteFile)
                     }),
                     new Menu.Item("Выход", Exit),
@@ -48,17 +48,6 @@ namespace TPA
 
             Menu.Begin();
         }
-
-        static void Print()
-        {
-            Menu.WriteLine("Selected: " + Menu.Selected.Name);
-        }
-        static void InputTest(string str)
-        {
-            var inp = Menu.Selected as Menu.InputItem;
-
-            Menu.WriteLine("You wrote: " + inp.Value);
-        }
         static void Exit()
         {
             Menu.Close();
@@ -69,42 +58,31 @@ namespace TPA
             Console.WriteLine("Файл с продуктами удалён!");
             Console.ReadKey();
         }
-        static void Sert()
+        static void AddProducts()
         {
-
             Serializer.Serialization();
         }
-        static void DSert()
+        static void DellProducts()
         {
-            DelSell.DeleteF();
+            BuySell.DeleteProducts();
         }
-        static void ISert()
-        {
-            Serializer.Add();
-            for (var e = 0; ; e++)
-            {
-                Console.Write("Напишите [Y/N] чтобы добавить ещё или завершить: ");
-                char confirm = Convert.ToChar(Console.ReadLine());
-                if (confirm == 'Y')
-                {
-                    Serializer.Add();
-                }
-                else if (confirm == 'N')
-                {
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("ERROR");
-                    break;
-                }
-            }
-        }
-        static void Desert()
+        static void DeserializerUser()
         {
             try
             {
-                Deserializer.Deserialization();
+                Deserializer.DeserializationUser();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            Console.ReadKey();
+        }
+        static void DeserializerTrader()
+        {
+            try
+            {
+                Deserializer.DeserializationTrader();
             }
             catch (Exception e)
             {

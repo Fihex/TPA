@@ -9,9 +9,9 @@ using System.Xml.Linq;
 
 namespace TPA
 {
-    class DelSell
+    class DellSell
     {
-        public static void DeleteF()
+        public static void DeleteProducts()
         {
             try
             {
@@ -19,7 +19,17 @@ namespace TPA
                 Info info = new Info();
                 XDocument xDoc = XDocument.Load("products.xml");
 
-                foreach (XElement xNode in xDoc.Root.Nodes())
+                    Console.Write("ID: ");
+                    info.Id = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("CATEGORY: ");
+                    info.Category = Console.ReadLine();
+
+                xDoc.Element("Products")
+                .Descendants("Product")
+                .Where(x => (string)x.Attribute("id") == "" + info.Id)
+                .Remove();
+
+                /*foreach (XElement xNode in xDoc.Root.Nodes())
                 {
                     Console.Write("ID: ");
                     info.Id = Convert.ToInt32(Console.ReadLine());
@@ -30,7 +40,11 @@ namespace TPA
                     {
                         xNode.Remove();
                     }
-                }
+                    else
+                    {
+                        Console.WriteLine("Попробуйте снова!");
+                    }
+                */
                 xDoc.Save("products.xml");
 
                 /*Info info = new Info();

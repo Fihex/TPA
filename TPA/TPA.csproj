@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bank.cs" />
-    <Compile Include="DelSell.cs" />
+    <Compile Include="BuySell.cs" />
     <Compile Include="Deserializer.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Product.cs" />

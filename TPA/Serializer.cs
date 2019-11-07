@@ -15,8 +15,12 @@ namespace TPA
         {
             try
             {
-                Info info = new Info();
-                List<Product> LProducts = new List<Product>();
+                string curFile = @"products.xml";
+                if (!File.Exists(curFile))
+                {
+                    
+                    Info info = new Info();
+                    List<Product> LProducts = new List<Product>();
                 
                     Console.WriteLine();
                     Console.Write("ID: ");
@@ -33,10 +37,7 @@ namespace TPA
 
                     LProducts.Add(new Product { Id = info.Id, Category = info.Category, Title = info.Title, price = new Price { Value = info.Price, Unit = "RUB" }, description = new Description { Weight = info.Weight } });
 
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
-                string curFile = @"products.xml";
-                if (!File.Exists(curFile))
-                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
                     StreamWriter writer = new StreamWriter("products.xml");
                     xmlSerializer.Serialize(writer, LProducts);
                     writer.Close();
@@ -45,7 +46,9 @@ namespace TPA
                 else if(File.Exists(curFile))
                 {
                     Add();
+
                     Console.WriteLine("Файл существует!");
+                    Console.ReadKey();
                 }
                 else
                 {
@@ -78,6 +81,7 @@ namespace TPA
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+                Console.ReadKey();
             }
             /*
             try
