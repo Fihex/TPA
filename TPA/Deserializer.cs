@@ -23,6 +23,7 @@ namespace TPA
                 }
                 else if(File.Exists(curFile))
                 {
+
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
                     StreamReader reader = new StreamReader("products.xml");
                     List<Product> LProducts = (List<Product>)xmlSerializer.Deserialize(reader);
@@ -93,6 +94,7 @@ namespace TPA
                 }
                 else if(File.Exists(curFile))
                 {
+
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
                     StreamReader reader = new StreamReader("products.xml");
                     List<Product> LProducts = (List<Product>)xmlSerializer.Deserialize(reader);

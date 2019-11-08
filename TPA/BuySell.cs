@@ -58,6 +58,21 @@ namespace TPA
                         break;
                     }
                 }
+
+                var doc = new XmlDocument();
+                doc.Load("products.xml");
+
+                var node = doc.SelectSingleNode("Products/Product");
+
+                if(node != null)
+                {
+                    Console.WriteLine("Узел существует!");
+                }
+                else
+                {
+                    File.Delete("products.xml");
+                }
+
                 /*foreach (XElement xNode in xDoc.Root.Nodes())
                 {
                     Console.Write("ID: ");
