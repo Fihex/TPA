@@ -6,141 +6,131 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace TPA
 {
     class BuySell
     {
-        public static void DeleteProducts()
+        public static void RemoveProducts()
         {
             try
             {
-
-                Info info = new Info();
-                XDocument xDoc = XDocument.Load("products.xml");
-
-                Console.Write("ID: ");
-                info.Id = Convert.ToInt32(Console.ReadLine());
-                Console.Write("CATEGORY: ");
-                info.Category = Console.ReadLine();
-
-                xDoc.Element("Products")
-                .Descendants("Product")
-                .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
-                .Remove();
-                xDoc.Save("products.xml");
-
-                for (var e = 0; ; e++)
+                string mainFile = @"products.xml";
+                if (!File.Exists(mainFile))
                 {
-                    Console.Write("Напишите [Y/N] чтобы добавить ещё или завершить: ");
-                    char confirm = Convert.ToChar(Console.ReadLine());
-                    if (confirm == 'Y')
+                    Console.Write("File not found\nPress and choose [Y/N]\nY - to add\nN - to break\n");
+                    var key = System.Console.ReadKey(true);
+                    switch(key.Key)
                     {
-                        Console.Write("ID: ");
-                        info.Id = Convert.ToInt32(Console.ReadLine());
-                        Console.Write("CATEGORY: ");
-                        info.Category = Console.ReadLine();
-
-                        xDoc.Element("Products")
-                        .Descendants("Product")
-                        .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
-                        .Remove();
-                        xDoc.Save("products.xml");
-                        continue;
+                        case System.ConsoleKey.Y:
+                            Serializer.Serialization();
+                            break;
+                        case System.ConsoleKey.N:
+                            Console.WriteLine("\nBreak down...");
+                            Console.ReadKey();
+                            break;
+                        default:
+                            break;
                     }
-                    else if (confirm == 'N')
+                }
+                else if(File.Exists(mainFile))
+                {
+                    Info info = new Info();
+                    XDocument xDoc = XDocument.Load(mainFile);
+
+                    Console.Write("Id: ");
+                    info.Id = Convert.ToInt32(Console.ReadLine());
+                    Console.Write("Category: ");
+                    info.Category = Console.ReadLine();
+
+                    xDoc.Element("Products")
+                    .Descendants("Product")
+                    .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
+                    .Remove();
+
+                    xDoc.Save(mainFile);
+
+                    while(true)
                     {
+                        Console.Write("Press and choose [Y/N]\nY - to add\nN - to break\n");
+                        var key = System.Console.ReadKey(true);
+                        switch(key.Key)
+                        {
+                            case System.ConsoleKey.Y:
+
+                                Console.Write("Id: ");
+                                info.Id = Convert.ToInt32(Console.ReadLine());
+                                Console.Write("Category: ");
+                                info.Category = Console.ReadLine();
+
+                                xDoc.Element("Products")
+                                .Descendants("Product")
+                                .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
+                                .Remove();
+
+                                xDoc.Save(mainFile);
+
+                                continue;
+                            case System.ConsoleKey.N:
+                                Console.WriteLine("\nBreak down...");
+                                Console.ReadKey();
+                                break;
+                            default:
+                                break;
+                        }
                         break;
+                    }
+                    
+                    var doc = new XmlDocument();
+                    doc.Load("products.xml");
+
+                    var node = doc.SelectSingleNode("Products/Product");
+
+                    if(node == null)
+                    {
+                        File.Delete("products.xml");
                     }
                     else
                     {
-                        Console.WriteLine("ERROR");
-                        break;
+                        Console.WriteLine("-_-");
                     }
-                }
-
-                var doc = new XmlDocument();
-                doc.Load("products.xml");
-
-                var node = doc.SelectSingleNode("Products/Product");
-
-                if(node != null)
-                {
-                    Console.WriteLine("Узел существует!");
                 }
                 else
                 {
-                    File.Delete("products.xml");
+                    Console.WriteLine("ERROR");
                 }
-
-                /*foreach (XElement xNode in xDoc.Root.Nodes())
-                {
-                    Console.Write("ID: ");
-                    info.Id = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("CATEGORY: ");
-                    info.Category = Console.ReadLine();
-
-                    if (xNode.Attribute("id").Value == "" + info.Id && xNode.Attribute("category").Value == "" + info.Category)
-                    {
-                        xNode.Remove();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Попробуйте снова!");
-                    }
-                */
-
-                /*Info info = new Info();
-                XDocument xDoc = XDocument.Load("products.xml");
-
-                foreach (XElement xNode in xDoc.Root.Nodes())
-                {
-                    Console.Write("ID: ");
-                    info.Id = Convert.ToInt32(Console.ReadLine());
-                    Console.Write("CATEGORY: ");
-                    info.Category = Console.ReadLine();
-
-                    if (xNode.Attribute("id").Value == "" + info.Id && xNode.Attribute("category").Value == "" + info.Category)
-                    {
-                        xNode.Remove();
-                    }
-                    xDoc.Save("products.xml");
-
-                    for (var i = 0; ; i++)
-                    {
-                        Console.Write("Напишите [Y/N] чтобы добавить ещё или завершить: ");
-                        char confirm = Convert.ToChar(Console.ReadLine());
-                        if (confirm == 'Y')
-                        {
-                            Console.Write("ID: ");
-                            info.Id = Convert.ToInt32(Console.ReadLine());
-                            Console.Write("CATEGORY: ");
-                            info.Category = Console.ReadLine();
-
-                            if (xNode.Attribute("id").Value == Convert.ToString(info.Id) && xNode.Attribute("category").Value == Convert.ToString(info.Category))
-                            {
-                                xNode.Remove();
-                            }
-                            xDoc.Save("products.xml");
-                        }
-                        else if (confirm == 'N')
-                        {
-                            xDoc.Save("products.xml");
-                            break;
-                        }
-                        else
-                        {
-                            Console.WriteLine("ERROR");
-                            break;
-                        }
-                    }
-                    break;
-                }*/
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 Console.ReadKey();
+            }
+        }
+        public static void Buy()
+        {
+            try
+            {
+                Info info = new Info();
+                XDocument xDoc = XDocument.Load("products.xml");
+
+                Console.Write("Id: ");
+                info.Id = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Category: ");
+                info.Category = Console.ReadLine();
+
+                string doc = xDoc.Element("Products")
+                .Elements("Product")
+                .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
+                .Single()
+                .Element("Price")
+                .Value;
+            
+                Console.WriteLine(doc);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
             }
         }
     }

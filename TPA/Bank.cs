@@ -8,12 +8,31 @@ namespace TPA
 {
     abstract class Bank
     {
-        public decimal Balance { get; set; }
+        public abstract decimal Balance { get; set;}
+
+        public abstract void Print();
 
     }
-    class Account
+    class AccountUser : Bank
     {
-        public decimal Balance { get; set; } = 1000;
+        public override decimal Balance { get; set; } = 1000;
+    
+        public override void Print()
+        {
+            Console.WriteLine("Your Balance: " + Balance);
+            Console.ReadKey();
+        }
+
+    }
+    class AccountTrader : Bank
+    {
+        public override decimal Balance { get; set; } = 0;
+
+        public override void Print()
+        {
+            Console.WriteLine("Your Balance: " + Balance);
+            Console.ReadKey();
+        }
 
     }
 }

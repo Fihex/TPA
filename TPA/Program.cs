@@ -18,33 +18,47 @@ namespace TPA
 
             Menu = new Menu
             (
-                "Главное меню",
+                "Main Menu",
                 new[]
                 {
-                    new Menu.Item("Покупатель", new[]
+                    new Menu.Item("Buyer", new[]
                     {
-                        new Menu.Item("Список продуктов", DeserializerUser),
-                        new Menu.Item("Купить продукт", Exit),
+                        new Menu.Item("Bank", new[]
+                        {
+                            new Menu.Item("Balance", BankUser),
+                            new Menu.Item("Take Credits", Exit)
+                        }),
+
+                        new Menu.Item("Products", new[]
+                        {
+                            new Menu.Item("Show Products", DeserializerUser),
+                            new Menu.Item("Buy Products", Buy)
+                        })
                     }),
-                    new Menu.Item("Продавец", new[]
+                    new Menu.Item("Seller", new[]
                     {
-                        new Menu.Item("Список продуктов", DeserializerTrader),
-                        new Menu.Item("Добавить продукты", AddProducts),
-                        new Menu.Item("Удалить продукты", DellProducts),
-                        new Menu.Item("Удалить файл", DeleteFile)
+                        new Menu.Item("Bank", new[]
+                        {
+                            new Menu.Item("Balance", BankTrader)
+                        }),
+
+                        new Menu.Item("Product Management", new[]
+                        {
+                            new Menu.Item("Show Products", DeserializerTrader),
+                            new Menu.Item("Add Products", AddProducts),
+                            new Menu.Item("Remove Products", RemoveProducts),
+                            new Menu.Item("Delete Product File", DeleteFile)
+                        }),
                     }),
-                    new Menu.Item("Выход", Exit),
+                    new Menu.Item("Exit", Exit),
                 }
             );
             //Menu.Main.MaxColumns = 1;
 
-            Account bank = new Account();
-
-            Menu.WriteLine($"Баланс: {Convert.ToString(bank.Balance)}");
-            Menu.WriteLine("Используйте ←↑↓→ для навигации.");
-            Menu.WriteLine("Нажмите Esc чтобы вернуться в главное меню.");
-            Menu.WriteLine("Нажмите Backspace чтобы вернуться назад.");
-            Menu.WriteLine("Нажмите Del для очистки журнала.");
+            Menu.WriteLine("Press ←↑↓→ for navigation.");
+            Menu.WriteLine("Press Esc to return Main Menu.");
+            Menu.WriteLine("Press Backspace to go back.");
+            Menu.WriteLine("Press Del for cleaning log.");
 
             Menu.Begin();
         }
@@ -54,41 +68,53 @@ namespace TPA
         }
         static void DeleteFile()
         {
-            File.Delete("products.xml");
-            Console.WriteLine("Файл с продуктами удалён!");
-            Console.ReadKey();
+            Console.WriteLine("Do you really want to delete this file?\nPress and choose [Y/N]");
+            var key = System.Console.ReadKey(true);
+            switch(key.Key)
+            {
+                case System.ConsoleKey.Y:
+                    File.Delete("products.xml");
+                    Console.WriteLine("Deleted File...");
+                    Console.ReadKey();
+                    break;
+                case System.ConsoleKey.N:
+                    Console.WriteLine("\nBreak down...");
+                    Console.ReadKey();
+                    break;
+                default:
+                    break;
+            }
         }
         static void AddProducts()
         {
             Serializer.Serialization();
         }
-        static void DellProducts()
+        static void RemoveProducts()
         {
-            BuySell.DeleteProducts();
+            BuySell.RemoveProducts();
         }
         static void DeserializerUser()
         {
-            try
-            {
-                Deserializer.DeserializationUser();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            Console.ReadKey();
+
+            Deserializer.DeserializationUser();
         }
         static void DeserializerTrader()
         {
-            try
-            {
-                Deserializer.DeserializationTrader();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            Console.ReadKey();
+            Deserializer.DeserializationTrader();
+        }
+        static void Buy()
+        {
+            BuySell.Buy();
+        }
+        static void BankUser()
+        {
+            Bank au = new AccountUser();
+            au.Print();
+        }
+        static void BankTrader()
+        {
+            Bank at = new AccountTrader();
+            at.Print();
         }
     }
 }

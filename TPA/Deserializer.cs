@@ -16,107 +16,135 @@ namespace TPA
         {
             try
             {
-                string curFile = @"products.xml";
-                if (!File.Exists(curFile))
-                {
-                    Console.WriteLine("Продавец ещё не добавил продукты!");
-                }
-                else if(File.Exists(curFile))
+                string mainFile = @"products.xml";
+                if(File.Exists(mainFile))
                 {
 
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
-                    StreamReader reader = new StreamReader("products.xml");
-                    List<Product> LProducts = (List<Product>)xmlSerializer.Deserialize(reader);
+                    var doc = new XmlDocument();
+                    doc.Load(mainFile);
 
-                    Console.WriteLine();
-                    foreach (Product ListProduct in LProducts)
-                    {
-                        Console.WriteLine($"ID: {ListProduct.Id}");
-                        Console.WriteLine($"CATEGORY: {ListProduct.Category}");
-                        Console.WriteLine($"TITLE: {ListProduct.Title}");
-                        Console.WriteLine($"PRICE: {ListProduct.price.Value} {ListProduct.price.Unit}");
-                        Console.WriteLine($"WEIGHT: {ListProduct.description.Weight}");
-                        Console.WriteLine();
+                    var node = doc.SelectSingleNode("Products/Product");
+
+                    if(node == null)
+                    {   
+                        Console.WriteLine("Seller did not add products!");
+                        Console.ReadKey();
                     }
+                    else
+                    {
 
-                    reader.Close();
-                    Console.WriteLine("Десериализация завершена!");
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
+                        StreamReader reader = new StreamReader(mainFile);
+                        List<Product> LProducts = (List<Product>)xmlSerializer.Deserialize(reader);
+
+                        Console.WriteLine();
+                        foreach (Product ListProduct in LProducts)
+                        {
+                            Console.WriteLine($"Id: {ListProduct.Id}");
+                            Console.WriteLine($"Category: {ListProduct.Category}");
+                            Console.WriteLine($"Title: {ListProduct.Title}");
+                            Console.WriteLine($"Price: {ListProduct.price.Value} {ListProduct.price.Unit}");
+                            Console.WriteLine($"Weight: {ListProduct.description.Weight}");
+                            Console.WriteLine();
+                        }
+
+                        reader.Close();
+
+                        Console.WriteLine("Deserialization completed...");
+                    }
                     Console.ReadKey();
+                }
+                else if (!File.Exists(mainFile))
+                {
+                    Console.WriteLine("Seller did not add products!");
                 }
                 else
                 {
-                    Console.WriteLine("ERROR");
+                    Console.WriteLine("Error");
                 }
+                Console.ReadKey();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
-            /*
-            try
-            {
-                XmlSerializer xmlSerializer = new XmlSerializer(typeof(Product));
-                StreamReader reader = new StreamReader("products.xml");
-                Product product = (Product)xmlSerializer.Deserialize(reader);
-                Console.WriteLine($"ID: {product.Id}");
-
-                Console.WriteLine("Десериализация завершена");
-
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            */
         }
        public static void DeserializationTrader()
         {
             try
             {
-                string curFile = @"products.xml";
-                if (!File.Exists(curFile))
+                string mainFile = @"products.xml";
+                if(File.Exists(mainFile))
                 {
-                    Console.WriteLine("Файл не существует!");
-                    Console.WriteLine("Создать файл [Y/N]");
-                    char confirm = Convert.ToChar(Console.ReadLine());
-                    if (confirm == 'Y')
+
+                    var doc = new XmlDocument();
+                    doc.Load(mainFile);
+
+                    var node = doc.SelectSingleNode("Products/Product");
+
+                    if(node == null)
                     {
-                        Serializer.Serialization();
-                    }
-                    else if (confirm == 'N')
-                    {
-                        Console.WriteLine("BREAK");
+                        Console.Write("Press and choose [Y/N]\nY - to add\nN - to break\n");
+                        var keyOne = System.Console.ReadKey(true);
+                        switch(keyOne.Key)
+                        {
+                        case System.ConsoleKey.Y:
+                            Serializer.Serialization();
+                            break;
+                        case System.ConsoleKey.N:
+                            Console.WriteLine("\nBreak down...");
+                            Console.ReadKey();
+                            break;
+                        default:
+                            File.Delete(mainFile);
+                            break;
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("ERROR");
+
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
+                        StreamReader reader = new StreamReader(mainFile);
+                        List<Product> LProducts = (List<Product>)xmlSerializer.Deserialize(reader);
+
+                        Console.WriteLine();
+                        foreach (Product ListProduct in LProducts)
+                        {
+                            Console.WriteLine($"Id: {ListProduct.Id}");
+                            Console.WriteLine($"Category: {ListProduct.Category}");
+                            Console.WriteLine($"Title: {ListProduct.Title}");
+                            Console.WriteLine($"Price: {ListProduct.price.Value} {ListProduct.price.Unit}");
+                            Console.WriteLine($"Weight: {ListProduct.description.Weight}");
+                            Console.WriteLine();
+                        }
+
+                        reader.Close();
+
+                        Console.WriteLine("Deserialization completed...");
                     }
+                    Console.ReadKey();
                 }
-                else if(File.Exists(curFile))
+                else if (!File.Exists(mainFile))
                 {
 
-                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(List<Product>), new XmlRootAttribute("Products"));
-                    StreamReader reader = new StreamReader("products.xml");
-                    List<Product> LProducts = (List<Product>)xmlSerializer.Deserialize(reader);
-
-                    Console.WriteLine();
-                    foreach (Product ListProduct in LProducts)
+                    Console.Write("Press and choose [Y/N]\nY - to add\nN - to break\n");
+                    var keyTwo = System.Console.ReadKey(true);
+                    switch(keyTwo.Key)
                     {
-                        Console.WriteLine($"ID: {ListProduct.Id}");
-                        Console.WriteLine($"CATEGORY: {ListProduct.Category}");
-                        Console.WriteLine($"TITLE: {ListProduct.Title}");
-                        Console.WriteLine($"PRICE: {ListProduct.price.Value} {ListProduct.price.Unit}");
-                        Console.WriteLine($"WEIGHT: {ListProduct.description.Weight}");
-                        Console.WriteLine();
+                    case System.ConsoleKey.Y:
+                        Serializer.Serialization();
+                        break;
+                    case System.ConsoleKey.N:
+                        Console.WriteLine("\nBreak down...");
+                        Console.ReadKey();
+                        break;
+                    default:
+                        break;
                     }
-
-                    reader.Close();
-                    Console.WriteLine("Десериализация завершена!");
-                    Console.ReadKey();
                 }
                 else
                 {
-                    Console.WriteLine("ERROR");
+                    Console.WriteLine("Error");
                 }
             }
             catch (Exception e)
