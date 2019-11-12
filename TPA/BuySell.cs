@@ -93,12 +93,12 @@ namespace TPA
                     }
                     else
                     {
-                        Console.WriteLine("-_-");
+                        Console.WriteLine("O_o");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("ERROR");
+                    Console.WriteLine("Error");
                 }
             }
             catch (Exception e)
