@@ -147,7 +147,7 @@ namespace TPA
 
                 doc.Save(mainFile);
 
-                /*var docA = new XmlDocument();
+                var docA = new XmlDocument();
                 docA.Load(mainFile);
 
                 var nodeA = docA.SelectSingleNode("Products/Product");
