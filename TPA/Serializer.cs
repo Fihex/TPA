@@ -102,27 +102,29 @@ namespace TPA
 
             XmlNode product = doc.CreateElement("Product");
             XmlAttribute id = doc.CreateAttribute("id");
-            id.Value = Convert.ToString(info.Id);
             XmlAttribute category = doc.CreateAttribute("category");
+            XmlNode title = doc.CreateElement("title");
+            XmlNode price = doc.CreateElement("price");
+            XmlAttribute unit = doc.CreateAttribute("unit");
+            XmlNode description = doc.CreateElement("description");
+            XmlNode weight = doc.CreateElement("weight");
+
+            id.Value = Convert.ToString(info.Id);
             category.Value = Convert.ToString(info.Category);
             product.Attributes.Append(id);
             product.Attributes.Append(category);
-            XmlNode title = doc.CreateElement("title");
             title.InnerText = Convert.ToString(info.Title);
             product.AppendChild(title);
-            XmlNode price = doc.CreateElement("price");
-            XmlAttribute unit = doc.CreateAttribute("unit");
             unit.Value = "RUB";
             price.InnerText = Convert.ToString(info.Price);
             price.Attributes.Append(unit);
             product.AppendChild(price);
-            XmlNode description = doc.CreateElement("description");
-            XmlNode weight = doc.CreateElement("weight");
             weight.InnerText = Convert.ToString(info.Weight);
             description.AppendChild(weight);
             product.AppendChild(description);
             doc.DocumentElement.AppendChild(product);
             doc.Save(mainFile);
+
             Console.WriteLine("Product added...");
             Console.ReadKey();
 

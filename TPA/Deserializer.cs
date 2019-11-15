@@ -52,7 +52,6 @@ namespace TPA
 
                         Console.WriteLine("Deserialization completed...");
                     }
-                    Console.ReadKey();
                 }
                 else if (!File.Exists(mainFile))
                 {
@@ -62,7 +61,6 @@ namespace TPA
                 {
                     Console.WriteLine("Error");
                 }
-                Console.ReadKey();
             }
             catch (Exception e)
             {

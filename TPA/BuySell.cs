@@ -83,13 +83,13 @@ namespace TPA
                     }
                     
                     var doc = new XmlDocument();
-                    doc.Load("products.xml");
+                    doc.Load(mainFile);
 
                     var node = doc.SelectSingleNode("Products/Product");
 
                     if(node == null)
                     {
-                        File.Delete("products.xml");
+                        File.Delete(mainFile);
                     }
                     else
                     {
@@ -107,31 +107,67 @@ namespace TPA
                 Console.ReadKey();
             }
         }
-        public static void Buy()
+        public static decimal Buy()
         {
-            try
-            {
                 Info info = new Info();
-                XDocument xDoc = XDocument.Load("products.xml");
+                string mainFile = @"products.xml";
+                XDocument doc = XDocument.Load(mainFile);
 
                 Console.Write("Id: ");
                 info.Id = Convert.ToInt32(Console.ReadLine());
                 Console.Write("Category: ");
                 info.Category = Console.ReadLine();
 
-                string doc = xDoc.Element("Products")
-                .Elements("Product")
-                .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
-                .Single()
-                .Element("Price")
-                .Value;
-            
-                Console.WriteLine(doc);
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+                var node = from product in doc.Descendants("Product")
+                           where (string)product.Attribute("id") == "" + info.Id && (string)product.Attribute("category") == "" + info.Category
+                           select new
+                           {
+                               id = product.Attribute("id").Value,
+                               category = product.Attribute("category").Value,
+                               title = product.Element("title").Value,
+                               price = product.Element("price").Value,
+                               weight = product.Element("description").Element("weight").Value
+                           };
+
+                decimal result = 0;
+                Console.WriteLine("You buy product or products...\n");
+                foreach ( var nod in node)
+                {
+                    Console.WriteLine("Id: " + nod.id);
+                    Console.WriteLine("Category: " + nod.category);
+                    Console.WriteLine("Title: " + nod.title);
+                    Console.WriteLine("Price: " + nod.price + " RUB");
+                    Console.WriteLine("weight: " + nod.weight);
+                    result = Convert.ToDecimal(nod.price);
+                }
+                doc.Element("Products")
+                                .Descendants("Product")
+                                .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
+                                .Remove();
+
+                doc.Save(mainFile);
+
+                /*var docA = new XmlDocument();
+                docA.Load(mainFile);
+
+                var nodeA = docA.SelectSingleNode("Products/Product");
+
+                if (nodeA == null)
+                {
+                    File.Delete(mainFile);
+                }
+                else
+                {
+                    Console.WriteLine("O_o");
+                }
+
+            /*IEnumerable<string element = xDoc.Element("Products").Descendants("Product")
+            .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
+            .Select(r => r.Element("Price")).Value;*/
+
+            Console.ReadKey();
+
+                return result;
         }
     }
 }
