@@ -78,11 +78,6 @@ namespace TPA
         {
             BuySell.RemoveProducts();
         }
-        static void DeserializerUser()
-        {
-
-            Deserializer.DeserializationUser();
-        }
         static void DeserializerTrader()
         {
             Deserializer.DeserializationTrader();
