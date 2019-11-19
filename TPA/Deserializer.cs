@@ -17,7 +17,7 @@ namespace TPA
             try
             {
                 string mainFile = @"products.xml";
-                if(File.Exists(mainFile))
+                if (File.Exists(mainFile))
                 {
 
                     var doc = new XmlDocument();
@@ -25,10 +25,9 @@ namespace TPA
 
                     var node = doc.SelectSingleNode("Products/Product");
 
-                    if(node == null)
-                    {   
-                        Console.WriteLine("Seller did not add products!");
-                        Console.ReadKey();
+                    if (node == null)
+                    {
+                        File.Delete(mainFile);
                     }
                     else
                     {
@@ -52,10 +51,12 @@ namespace TPA
 
                         Console.WriteLine("Deserialization completed...");
                     }
+                    Console.ReadKey();
                 }
                 else if (!File.Exists(mainFile))
                 {
                     Console.WriteLine("Seller did not add products!");
+                    Console.ReadKey();
                 }
                 else
                 {
@@ -67,7 +68,7 @@ namespace TPA
                 Console.WriteLine(e.Message);
             }
         }
-       public static void DeserializationTrader()
+        public static void DeserializationTrader()
         {
             try
             {

@@ -25,12 +25,18 @@ namespace TPA
                     {
                         new Menu.Item("Product Bank", new[]
                         {
-                            new Menu.Item("Show Balance", Bank),
-                            new Menu.Item("Take Credit", GetCredit)
+                            new Menu.Item("Show Balance", BankUser),
+                            new Menu.Item("Show Products", DeserializerUser),
+                            new Menu.Item("Take Credit", GetCredit),
+                            new Menu.Item("Buy Products", Buy)
                         })
                     }),
                     new Menu.Item("Seller", new[]
                     {
+                        new Menu.Item("Bank", new[]
+                        {
+                            new Menu.Item("Show Balance", BankTrader)
+                        }),
                         new Menu.Item("Product Management", new[]
                         {
                             new Menu.Item("Show Products", DeserializerTrader),
@@ -82,11 +88,15 @@ namespace TPA
         {
             BuySell.RemoveProducts();
         }
+        static void DeserializerUser()
+        {
+            Deserializer.DeserializationUser();
+        }
         static void DeserializerTrader()
         {
             Deserializer.DeserializationTrader();
         }
-        static void Bank()
+        static void BankUser()
         {
             Bank au = new AccountUser();
             au.Print();
@@ -95,6 +105,16 @@ namespace TPA
         {
             AccountUser au = new AccountUser();
             au.ShowCredit();
+        }
+        static void Buy()
+        {
+            AccountUser au = new AccountUser();
+            au.BuyProducts();
+        }
+        static void BankTrader()
+        {
+            Bank at = new AccountTrader();
+            at.Print();
         }
     }
 }

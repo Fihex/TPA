@@ -109,8 +109,22 @@ namespace TPA
         }
         public static decimal Buy()
         {
+            AccountUser au = new AccountUser();
+            string mainFile = @"products.xml";
+            decimal result = 0;
+            decimal money = au.GetBalance();
+            if (money == 0 || money < 0)
+            {
+                Console.WriteLine("Pls take credit");
+            }
+            else if (!File.Exists(mainFile))
+            {
+                Console.WriteLine("Seller did not add products!");
+                Console.ReadKey();
+            }
+            else
+            {
                 Info info = new Info();
-                string mainFile = @"products.xml";
                 XDocument doc = XDocument.Load(mainFile);
 
                 Console.Write("Id: ");
@@ -129,9 +143,8 @@ namespace TPA
                                weight = product.Element("description").Element("weight").Value
                            };
 
-                decimal result = 0;
                 Console.WriteLine("You buy product or products...\n");
-                foreach ( var nod in node)
+                foreach (var nod in node)
                 {
                     Console.WriteLine("Id: " + nod.id);
                     Console.WriteLine("Category: " + nod.category);
@@ -161,13 +174,14 @@ namespace TPA
                     Console.WriteLine("O_o");
                 }
 
-            /*IEnumerable<string element = xDoc.Element("Products").Descendants("Product")
-            .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
-            .Select(r => r.Element("Price")).Value;*/
+                /*IEnumerable<string element = xDoc.Element("Products").Descendants("Product")
+                .Where(x => (string)x.Attribute("id") == "" + info.Id && (string)x.Attribute("category") == "" + info.Category)
+                .Select(r => r.Element("Price")).Value;*/
 
-            Console.ReadKey();
+                Console.ReadKey();
 
-                return result;
+            }
+            return result;
         }
     }
 }
