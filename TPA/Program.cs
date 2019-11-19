@@ -23,7 +23,11 @@ namespace TPA
                 {
                     new Menu.Item("Buyer", new[]
                     {
-                        new Menu.Item("ProductBank", Bank)
+                        new Menu.Item("Product Bank", new[]
+                        {
+                            new Menu.Item("Show Balance", Bank),
+                            new Menu.Item("Take Credit", GetCredit)
+                        })
                     }),
                     new Menu.Item("Seller", new[]
                     {
@@ -33,7 +37,7 @@ namespace TPA
                             new Menu.Item("Add Products", AddProducts),
                             new Menu.Item("Remove Products", RemoveProducts),
                             new Menu.Item("Delete Product File", DeleteFile)
-                        }),
+                        })
                     }),
                     new Menu.Item("Exit", Exit),
                 }
@@ -55,7 +59,7 @@ namespace TPA
         {
             Console.WriteLine("Do you really want to delete this file?\nPress and choose [Y/N]");
             var key = System.Console.ReadKey(true);
-            switch(key.Key)
+            switch (key.Key)
             {
                 case System.ConsoleKey.Y:
                     File.Delete("products.xml");
@@ -84,8 +88,13 @@ namespace TPA
         }
         static void Bank()
         {
-            Bank au = new Account();
+            Bank au = new AccountUser();
             au.Print();
+        }
+        static void GetCredit()
+        {
+            AccountUser au = new AccountUser();
+            au.ShowCredit();
         }
     }
 }

@@ -20,6 +20,7 @@ namespace TPA
         string Unit { get; set; }
         decimal Value { get; set; }
     }
+    [XmlRoot("Product")]
     public class Product : IProduct
     {
 

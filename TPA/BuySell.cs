@@ -137,7 +137,7 @@ namespace TPA
                     Console.WriteLine("Category: " + nod.category);
                     Console.WriteLine("Title: " + nod.title);
                     Console.WriteLine("Price: " + nod.price + " RUB");
-                    Console.WriteLine("weight: " + nod.weight);
+                    Console.WriteLine("Weight: " + nod.weight);
                     result = Convert.ToDecimal(nod.price);
                 }
                 doc.Element("Products")
